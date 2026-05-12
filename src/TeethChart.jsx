@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const TEETH = [
   { n: 11, x: 42.0, y: 23.3 },
   { n: 21, x: 50, y: 23.3 },
@@ -34,48 +36,66 @@ const TEETH = [
   { n: 31, x: 50.4, y: 78.0 },
 ];
 
+const SELECTED_BG = 'rgba(0,150,255,0.55)';
+const HOVER_BG = 'rgba(0,150,255,0.35)';
+
 export default function TeethChart({ onToothClick }) {
+  const [selected, setSelected] = useState(null);
+  const [hovered, setHovered] = useState(null);
+
+  const handleClick = (n) => {
+    setSelected(n);
+    onToothClick(n);
+  };
+
   return (
     <div
       style={{
-        position: "relative",
+        position: 'relative',
         width: 400,
-        aspectRatio: "760 / 1370",
-        userSelect: "none",
+        aspectRatio: '760 / 1370',
+        userSelect: 'none',
       }}
     >
       <img
         src="/teeth.png"
         alt="Dental chart"
-        style={{ width: "100%", height: "100%", display: "block" }}
+        style={{ width: '100%', height: '100%', display: 'block' }}
       />
-      {TEETH.map(({ n, x, y }) => (
-        <button
-          key={n}
-          onClick={() => onToothClick(n)}
-          title={`Tooth ${n}`}
-          style={{
-            position: "absolute",
-            left: `${x}%`,
-            top: `${y}%`,
-            transform: "translate(-50%, -50%)",
-            width: 25,
-            height: 25,
-            borderRadius: "50%",
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            padding: 0,
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "rgba(0,150,255,0.35)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "transparent")
-          }
-          aria-label={`Tooth ${n}`}
-        />
-      ))}
+      {TEETH.map(({ n, x, y }) => {
+        const isSelected = selected === n;
+        const isHovered = hovered === n;
+        const background = isSelected
+          ? SELECTED_BG
+          : isHovered
+          ? HOVER_BG
+          : 'transparent';
+        return (
+          <button
+            key={n}
+            onClick={() => handleClick(n)}
+            onMouseEnter={() => setHovered(n)}
+            onMouseLeave={() => setHovered((h) => (h === n ? null : h))}
+            title={`Tooth ${n}`}
+            aria-label={`Tooth ${n}`}
+            aria-pressed={isSelected}
+            style={{
+              position: 'absolute',
+              left: `${x}%`,
+              top: `${y}%`,
+              transform: 'translate(-50%, -50%)',
+              width: 25,
+              height: 25,
+              borderRadius: '50%',
+              border: 'none',
+              background,
+              cursor: 'pointer',
+              padding: 0,
+              transition: 'background 120ms ease',
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
