@@ -11,7 +11,7 @@ const TEETH = [
   { n: 24, x: 64.5, y: 29.5 },
   { n: 15, x: 26.5, y: 33 },
   { n: 25, x: 66.0, y: 32.9 },
-  { n: 16, x: 26.3, y: 37.6 },
+  { n: 16, x: 25.3, y: 37.6 },
   { n: 26, x: 68.0, y: 36.6 },
   { n: 17, x: 24.3, y: 41.6 },
   { n: 27, x: 70.0, y: 41.6 },
@@ -39,14 +39,8 @@ const TEETH = [
 const SELECTED_BG = 'rgba(0,150,255,0.55)';
 const HOVER_BG = 'rgba(0,150,255,0.35)';
 
-export default function TeethChart({ onToothClick }) {
-  const [selected, setSelected] = useState(null);
+export default function TeethChart({ selectedTeeth, onToggleTooth }) {
   const [hovered, setHovered] = useState(null);
-
-  const handleClick = (n) => {
-    setSelected(n);
-    onToothClick(n);
-  };
 
   return (
     <div
@@ -63,7 +57,7 @@ export default function TeethChart({ onToothClick }) {
         style={{ width: '100%', height: '100%', display: 'block' }}
       />
       {TEETH.map(({ n, x, y }) => {
-        const isSelected = selected === n;
+        const isSelected = selectedTeeth.has(n);
         const isHovered = hovered === n;
         const background = isSelected
           ? SELECTED_BG
@@ -73,7 +67,7 @@ export default function TeethChart({ onToothClick }) {
         return (
           <button
             key={n}
-            onClick={() => handleClick(n)}
+            onClick={() => onToggleTooth(n, !isSelected)}
             onMouseEnter={() => setHovered(n)}
             onMouseLeave={() => setHovered((h) => (h === n ? null : h))}
             title={`Tooth ${n}`}
