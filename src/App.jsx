@@ -24,13 +24,46 @@ export default function App() {
       action,
       created_date: new Date().toISOString(),
     };
-    setActions((prev) => [optimistic, ...prev]);
+    setActions((prev) => {
+      const updated = [optimistic, ...prev];
+      const updatedSelectedTeeth = deriveSelected(updated);
+      window.parent.postMessage({
+        type: "SYNC_SELECTED_TEETH",
+        payload: {
+          selectedTeeth: Array.from(updatedSelectedTeeth),
+          timestamp: Date.now()
+        }
+      }, "*");
+      return updated;
+    });
     try {
       const saved = await ToothAction.create({ tooth_number: tooth, action });
-      setActions((prev) => prev.map((a) => (a.id === optimistic.id ? saved : a)));
+      setActions((prev) => {
+        const updated = prev.map((a) => (a.id === optimistic.id ? saved : a));
+        const updatedSelectedTeeth = deriveSelected(updated);
+        window.parent.postMessage({
+          type: "SYNC_SELECTED_TEETH",
+          payload: {
+            selectedTeeth: Array.from(updatedSelectedTeeth),
+            timestamp: Date.now()
+          }
+        }, "*");
+        return updated;
+      });
     } catch (e) {
       setError(e.message);
-      setActions((prev) => prev.filter((a) => a.id !== optimistic.id));
+      setActions((prev) => {
+        const updated = prev.filter((a) => a.id !== optimistic.id);
+        const updatedSelectedTeeth = deriveSelected(updated);
+        window.parent.postMessage({
+          type: "SYNC_SELECTED_TEETH",
+          payload: {
+            selectedTeeth: Array.from(updatedSelectedTeeth),
+            timestamp: Date.now()
+          }
+        }, "*");
+        return updated;
+      });
     }
   };
 
