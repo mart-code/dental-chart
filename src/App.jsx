@@ -1,31 +1,21 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import TeethChart from './TeethChart.jsx';
-import { ToothAction } from './base44Client.js';
 
 export default function App() {
   const [actions, setActions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    ToothAction.list('-created_date', 200)
-      .then((rows) => setActions(rows || []))
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, []);
 
   const selectedTeeth = useMemo(() => deriveSelected(actions), [actions]);
 
-  const handleToggleTooth = async (tooth, nowSelected) => {
+  const handleToggleTooth = (tooth, nowSelected) => {
     const action = nowSelected ? 'selected' : 'deselected';
-    const optimistic = {
-      id: `tmp-${Date.now()}`,
+    const newAction = {
+      id: `local-${Date.now()}`,
       tooth_number: tooth,
       action,
       created_date: new Date().toISOString(),
     };
     setActions((prev) => {
-      const updated = [optimistic, ...prev];
+      const updated = [newAction, ...prev];
       const updatedSelectedTeeth = deriveSelected(updated);
       window.parent.postMessage({
         type: "SYNC_SELECTED_TEETH",
@@ -36,35 +26,6 @@ export default function App() {
       }, "*");
       return updated;
     });
-    try {
-      const saved = await ToothAction.create({ tooth_number: tooth, action });
-      setActions((prev) => {
-        const updated = prev.map((a) => (a.id === optimistic.id ? saved : a));
-        const updatedSelectedTeeth = deriveSelected(updated);
-        window.parent.postMessage({
-          type: "SYNC_SELECTED_TEETH",
-          payload: {
-            selectedTeeth: Array.from(updatedSelectedTeeth),
-            timestamp: Date.now()
-          }
-        }, "*");
-        return updated;
-      });
-    } catch (e) {
-      setError(e.message);
-      setActions((prev) => {
-        const updated = prev.filter((a) => a.id !== optimistic.id);
-        const updatedSelectedTeeth = deriveSelected(updated);
-        window.parent.postMessage({
-          type: "SYNC_SELECTED_TEETH",
-          payload: {
-            selectedTeeth: Array.from(updatedSelectedTeeth),
-            timestamp: Date.now()
-          }
-        }, "*");
-        return updated;
-      });
-    }
   };
 
   return (
@@ -76,34 +37,6 @@ export default function App() {
 
         <div style={{ flex: 1, minWidth: 280 }}>
           <SelectedTeeth selectedTeeth={selectedTeeth} />
-
-          <h2 style={{ marginTop: 0 }}>Actions</h2>
-          {error && <div style={{ color: 'crimson' }}>Error: {error}</div>}
-          {loading ? (
-            <div>Loading...</div>
-          ) : actions.length === 0 ? (
-            <div style={{ color: '#666' }}>No actions yet. Click a tooth.</div>
-          ) : (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {actions.map((a) => (
-                <li
-                  key={a.id}
-                  style={{
-                    padding: '6px 0',
-                    borderBottom: '1px solid #eee',
-                    fontSize: 14,
-                  }}
-                >
-                  <strong>{a.tooth_number}</strong> was {a.action}
-                  <span style={{ color: '#888', marginLeft: 8 }}>
-                    {a.created_date
-                      ? new Date(a.created_date).toLocaleString()
-                      : ''}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </div>
     </div>
