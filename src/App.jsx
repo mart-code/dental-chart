@@ -9,6 +9,7 @@ const shellStyle = {
   maxWidth: 900,
   margin: "0 auto",
   color: "#0f172a",
+  position: "relative",
 };
 
 const panelStyle = {
@@ -135,6 +136,11 @@ export default function App() {
         style={{
           padding: 18,
           marginBottom: 18,
+          textAlign: "center",
+          position: "absolute",
+          top: "5vh",
+          right: "50%",
+          transform: "translate(50%, 0)",
         }}
       >
         <h1 style={{ margin: "8px 0 0", fontSize: 28, lineHeight: 1.1 }}>Dental Chart</h1>
@@ -167,12 +173,10 @@ export default function App() {
           </div>
         </div>
       ) : (
-        <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
           <div style={{ padding: 20 }}>
             <TeethChart chartImageSrc={CHART_IMAGE_SRC} selectedTeeth={selectedTeeth} onToggleTooth={handleToggleTooth} />
           </div>
-
-          
         </div>
       )}
     </div>
