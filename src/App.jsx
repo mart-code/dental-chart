@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import TeethChart from "./TeethChart.jsx";
 
-const CHART_IMAGE_SRC = "/teeth.png";
+const CHART_IMAGE_SRC = "/teeth.webp";
 
 const shellStyle = {
   fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
