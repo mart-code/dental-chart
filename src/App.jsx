@@ -172,9 +172,7 @@ export default function App() {
             <TeethChart chartImageSrc={CHART_IMAGE_SRC} selectedTeeth={selectedTeeth} onToggleTooth={handleToggleTooth} />
           </div>
 
-          <div style={{ flex: 1, minWidth: 280, padding: 20 }}>
-            <SelectedTeeth teeth={sortedSelectedTeeth} />
-          </div>
+          
         </div>
       )}
     </div>
