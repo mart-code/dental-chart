@@ -39,7 +39,7 @@ const TEETH = [
 const SELECTED_BG = 'rgba(0,150,255,0.55)';
 const HOVER_BG = 'rgba(0,150,255,0.35)';
 
-export default function TeethChart({ selectedTeeth, onToggleTooth }) {
+export default function TeethChart({ chartImageSrc, selectedTeeth, onToggleTooth }) {
   const [hovered, setHovered] = useState(null);
 
   return (
@@ -52,8 +52,11 @@ export default function TeethChart({ selectedTeeth, onToggleTooth }) {
       }}
     >
       <img
-        src="/teeth.png"
+        src={chartImageSrc}
         alt="Dental chart"
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
         style={{ width: '100%', height: '100%', display: 'block' }}
       />
       {TEETH.map(({ n, x, y }) => {

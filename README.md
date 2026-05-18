@@ -1,28 +1,26 @@
 # Dental Chart
 
-Single-page React app: click a tooth on the dental diagram, the action is recorded to a Base44 `ToothAction` entity, and the log is rendered next to the chart.
+Single-page React app for an embedded dental workspace. It preloads the chart image early, renders a deliberate loading state, and posts lifecycle events back to the parent iframe host.
 
 ## Setup
 
 ```bash
 npm install
-cp .env.example .env   # set VITE_BASE44_APP_ID
 npm run dev
 ```
 
-## Base44 entity
+## Embed Events
 
-Create a `ToothAction` entity in your Base44 app using the schema in `entities/ToothAction.json`:
+When loaded inside an iframe, the app posts these messages to the parent window:
 
-| field | type | notes |
-|---|---|---|
-| `tooth_number` | number | FDI: 11-18, 21-28, 31-38, 41-48 |
-| `action` | string | defaults to `"clicked"` |
-
-`id` and `created_date` are provided by Base44 automatically.
+- `DENTAL_CHART_BOOTING`
+- `DENTAL_CHART_READY`
+- `DENTAL_CHART_ERROR`
+- `SYNC_SELECTED_TEETH`
 
 ## Files
 
-- [src/App.jsx](src/App.jsx) — page, loads list and creates new actions on click
-- [src/TeethChart.jsx](src/TeethChart.jsx) — SVG dental chart (FDI numbering)
-- [src/base44Client.js](src/base44Client.js) — Base44 SDK client + `ToothAction` entity
+- [src/App.jsx](src/App.jsx) - boot/loading state and parent iframe messaging
+- [src/TeethChart.jsx](src/TeethChart.jsx) - dental chart rendering and selection targets
+- [EMBEDDING.md](EMBEDDING.md) - required host-app iframe lifecycle pattern
+- [netlify.toml](netlify.toml) - cache headers for Netlify deployment
