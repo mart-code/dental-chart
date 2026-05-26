@@ -132,19 +132,6 @@ export default function App() {
         }
       `}</style>
 
-      <div
-        style={{
-          padding: 18,
-          marginBottom: 18,
-          textAlign: "center",
-          position: "absolute",
-          top: "5vh",
-          right: "50%",
-          transform: "translate(50%, 0)",
-        }}
-      >
-        <h1 style={{ margin: "8px 0 0", fontSize: 28, lineHeight: 1.1 }}>Dental Chart</h1>
-      </div>
 
       {bootState !== "ready" ? (
         <div
