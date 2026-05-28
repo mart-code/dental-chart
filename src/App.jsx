@@ -6,7 +6,7 @@ const CHART_IMAGE_SRC = "/teeth.webp";
 const shellStyle = {
   fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   width: "100%",
-  minHeight: "100vh",
+  height: "100vh",
   boxSizing: "border-box",
   padding: 20,
   margin: 0,
