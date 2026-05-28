@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const TEETH = [
   { n: 11, x: 42.0, y: 23.3 },
@@ -36,8 +36,8 @@ const TEETH = [
   { n: 31, x: 50.4, y: 78.0 },
 ];
 
-const SELECTED_BG = 'rgba(0,150,255,0.55)';
-const HOVER_BG = 'rgba(0,150,255,0.35)';
+const SELECTED_BG = "rgba(0,150,255,0.55)";
+const HOVER_BG = "rgba(0,150,255,0.35)";
 
 export default function TeethChart({ chartImageSrc, selectedTeeth, onToggleTooth }) {
   const [hovered, setHovered] = useState(null);
@@ -45,28 +45,19 @@ export default function TeethChart({ chartImageSrc, selectedTeeth, onToggleTooth
   return (
     <div
       style={{
-        position: 'relative',
-        width: 400,
-        aspectRatio: '760 / 1370',
-        userSelect: 'none',
+        position: "relative",
+        width: "100%",
+        maxWidth: 400,
+        aspectRatio: "760 / 1370",
+        userSelect: "none",
+        overflow: "hidden",
       }}
     >
-      <img
-        src={chartImageSrc}
-        alt="Dental chart"
-        loading="eager"
-        decoding="async"
-        fetchPriority="high"
-        style={{ width: '100%', height: '100%', display: 'block' }}
-      />
+      <img src={chartImageSrc} alt="Dental chart" loading="eager" decoding="async" fetchPriority="high" style={{ width: "100%", height: "100%", display: "block" }} />
       {TEETH.map(({ n, x, y }) => {
         const isSelected = selectedTeeth.has(n);
         const isHovered = hovered === n;
-        const background = isSelected
-          ? SELECTED_BG
-          : isHovered
-          ? HOVER_BG
-          : 'transparent';
+        const background = isSelected ? SELECTED_BG : isHovered ? HOVER_BG : "transparent";
         return (
           <button
             key={n}
@@ -77,18 +68,18 @@ export default function TeethChart({ chartImageSrc, selectedTeeth, onToggleTooth
             aria-label={`Tooth ${n}`}
             aria-pressed={isSelected}
             style={{
-              position: 'absolute',
+              position: "absolute",
               left: `${x}%`,
               top: `${y}%`,
-              transform: 'translate(-50%, -50%)',
+              transform: "translate(-50%, -50%)",
               width: 25,
               height: 25,
-              borderRadius: '50%',
-              border: 'none',
+              borderRadius: "50%",
+              border: "none",
               background,
-              cursor: 'pointer',
+              cursor: "pointer",
               padding: 0,
-              transition: 'background 120ms ease',
+              transition: "background 120ms ease",
             }}
           />
         );

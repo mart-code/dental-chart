@@ -5,11 +5,17 @@ const CHART_IMAGE_SRC = "/teeth.webp";
 
 const shellStyle = {
   fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  width: "100%",
+  minHeight: "100vh",
+  boxSizing: "border-box",
   padding: 20,
-  maxWidth: 900,
-  margin: "0 auto",
+  margin: 0,
   color: "#0f172a",
   position: "relative",
+  overflow: "hidden",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 const panelStyle = {
@@ -132,14 +138,15 @@ export default function App() {
         }
       `}</style>
 
-
       {bootState !== "ready" ? (
         <div
           style={{
-            minHeight: 540,
+            width: "100%",
+            minHeight: "100%",
             display: "grid",
             placeItems: "center",
             padding: 24,
+            boxSizing: "border-box",
             textAlign: "center",
             background: "radial-gradient(circle at top, rgba(204, 251, 241, 0.7), rgba(255, 255, 255, 0.98) 52%)",
           }}
@@ -161,7 +168,7 @@ export default function App() {
         </div>
       ) : (
         <div style={{ display: "flex", justifyContent: "center", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
-          <div style={{ padding: 20 }}>
+          <div style={{ padding: 20, overflow: "hidden" }}>
             <TeethChart chartImageSrc={CHART_IMAGE_SRC} selectedTeeth={selectedTeeth} onToggleTooth={handleToggleTooth} />
           </div>
         </div>
